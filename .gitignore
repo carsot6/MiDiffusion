@@ -29,3 +29,31 @@ scripts/synthetic_vs_real_classifier.py
 
 # log files
 *.log-*
+
+# Data and model weights (symlinked from OneDrive, too large for git)
+pretrained/
+midiffusion/datasets/data/
+data/
+
+# 3D model outputs and visualizations
+*.glb
+*.obj
+*.stl
+*.ply
+*.png
+*.jpg
+*.zip
+
+# Processed datasets
+*.pkl
+*.npz
+*.npy
+*.pt
+*.pth
+
+# macOS
+.DS_Store
+*.swp
+
+# Jupyter
+.ipynb_checkpoints/

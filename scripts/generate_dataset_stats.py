@@ -30,7 +30,7 @@ Layout expected (same as the loader):
 
 Usage:
     python scripts/generate_dataset_stats.py <data_dir> \
-        --categories target_categories_v2.json \
+        --frozen-vocab config/gpc_categories.json \
         --splits gpc_splits.csv \
         [--scheme 2] [--out <data_dir>/dataset_stats.txt] [--dry-run]
 """
@@ -62,6 +62,29 @@ def load_categories(path):
     names = [n for n in names if n not in ("start", "end", "__none__", "")]
     # deterministic order (matches reference which sorts object_types)
     return sorted(names)
+
+
+def load_frozen_vocab(path):
+    """Return the ordered category list VERBATIM (no sorting) from a frozen vocab
+    file (config/gpc_categories.json). Order is authoritative: it defines the
+    one-hot column indices and must never be re-sorted.
+
+    Accepts either {"object_types": [...]} or a plain JSON list of names."""
+    with open(path) as f:
+        obj = json.load(f)
+    if isinstance(obj, dict) and "object_types" in obj:
+        names = list(obj["object_types"])
+    elif isinstance(obj, list):
+        names = list(obj)
+    else:
+        raise ValueError(
+            "frozen vocab must be a list or have an 'object_types' key")
+    bad = [n for n in names if n in ("start", "end", "__none__", "")]
+    if bad:
+        raise ValueError(f"frozen vocab must not contain sentinels/none: {bad}")
+    if len(set(names)) != len(names):
+        raise ValueError("frozen vocab contains duplicate categories")
+    return names
 
 
 def load_splits(path):
@@ -99,8 +122,14 @@ def main(argv):
     ap = argparse.ArgumentParser(
         description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("data_dir", help="directory of <tag>/boxes.npz")
-    ap.add_argument("--categories", required=True,
-                    help="target_categories_v2.json (dict or list of names)")
+    ap.add_argument("--frozen-vocab", default=None,
+                    help="config/gpc_categories.json: ordered category list used "
+                         "VERBATIM as object_types (recommended; prevents column "
+                         "drift). Takes precedence over --categories.")
+    ap.add_argument("--categories", default=None,
+                    help="target_categories_v2.json (dict or list); names are "
+                         "SORTED to define column order. Use only without "
+                         "--frozen-vocab.")
     ap.add_argument("--splits", default=None,
                     help="scene_id,split CSV. Bounds use train+val only. "
                          "If omitted, all rooms are used (with a warning).")
@@ -117,7 +146,14 @@ def main(argv):
                     help="write even if some rooms fail width validation")
     args = ap.parse_args(argv)
 
-    object_types = load_categories(args.categories)
+    if args.frozen_vocab:
+        object_types = load_frozen_vocab(args.frozen_vocab)
+        print(f"Vocabulary: frozen ({args.frozen_vocab}), order preserved verbatim")
+    elif args.categories:
+        object_types = load_categories(args.categories)
+        print(f"Vocabulary: {args.categories} (sorted to define column order)")
+    else:
+        ap.error("provide --frozen-vocab (recommended) or --categories")
     n_obj = len(object_types)
     extra = ["start", "end"] if args.scheme == 2 else ["end"]
     class_labels = object_types + extra

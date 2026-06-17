@@ -1,0 +1,18 @@
+{
+  "by_label": {
+    "dining_chair": {
+      "asset_url": "https://example.com/assets/chair.glb"
+    },
+    "dining_table": {
+      "asset_url": "https://example.com/assets/table.glb",
+      "scale": [1.0, 1.0, 1.0],
+      "offset": [0.0, 0.0, 0.0]
+    }
+  },
+  "by_name": {
+    "dining_chair_003": {
+      "asset_url": "https://example.com/assets/chair_variant.glb"
+    }
+  },
+  "default_asset_url": "https://example.com/assets/fallback.glb"
+}

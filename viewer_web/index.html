@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>MiDiffusion Scene Viewer</title>
+    <link rel="stylesheet" href="./styles.css" />
+    <script type="importmap">
+      {
+        "imports": {
+          "three": "https://unpkg.com/three@0.160.1/build/three.module.js",
+          "three/addons/": "https://unpkg.com/three@0.160.1/examples/jsm/"
+        }
+      }
+    </script>
+  </head>
+  <body>
+    <div class="app-shell">
+      <aside class="panel panel-left">
+        <header class="brand">
+          <p class="eyebrow">Local Tool</p>
+          <h1>MiDiffusion Scene Viewer</h1>
+          <p class="subtitle">Drop a `results.pkl` or a scene manifest JSON and inspect room + furniture assets in 3D.</p>
+        </header>
+
+        <section class="card drop-card">
+          <h2>Load File</h2>
+          <label id="drop-zone" class="drop-zone" for="file-input">
+            <input id="file-input" type="file" accept=".pkl,.json,application/json" />
+            <span class="drop-main">Drag and drop here</span>
+            <span class="drop-sub">or click to browse</span>
+            <span class="drop-hint">Accepted: `.pkl` (raw results) or `.json` (manifest)</span>
+          </label>
+          <p id="load-status" class="status idle">Waiting for file...</p>
+        </section>
+
+        <section class="card">
+          <h2>Asset Map (Optional)</h2>
+          <p class="helper">Leave empty for auto asset resolution from room JSON `productNo`.</p>
+          <textarea id="asset-map" spellcheck="false" placeholder="{
+  &quot;by_label&quot;: {
+    &quot;dining_chair&quot;: {
+      &quot;asset_url&quot;: &quot;https://catalog-processed.../chair.glb&quot;
+    }
+  },
+  &quot;by_product_no&quot;: {
+    &quot;80499199&quot;: {
+      &quot;asset_url&quot;: &quot;https://catalog-processed.../item.glb&quot;
+    }
+  }
+}"></textarea>
+        </section>
+
+        <section class="card controls-card">
+          <h2>Viewer Controls</h2>
+          <div class="row">
+            <label for="scene-select">Scene</label>
+            <div class="inline-controls">
+              <button id="prev-scene" type="button">Prev</button>
+              <select id="scene-select"></select>
+              <button id="next-scene" type="button">Next</button>
+            </div>
+          </div>
+          <div class="row toggles">
+            <label><input id="toggle-assets" type="checkbox" checked /> Assets</label>
+            <label><input id="toggle-boxes" type="checkbox" checked /> Boxes</label>
+            <label><input id="toggle-walls" type="checkbox" checked /> Walls</label>
+            <label><input id="toggle-floor" type="checkbox" checked /> Floor</label>
+            <label><input id="toggle-grid" type="checkbox" /> Grid</label>
+            <label><input id="toggle-auto-fit" type="checkbox" checked /> Auto-fit assets</label>
+          </div>
+          <div class="row small-inputs">
+            <label>Wall height <input id="wall-height" type="number" step="0.1" value="2.6" /></label>
+            <label>Wall thickness <input id="wall-thickness" type="number" step="0.01" value="0.08" /></label>
+            <label>Limit scenes <input id="scene-limit" type="number" min="1" placeholder="all" /></label>
+          </div>
+          <button id="reload-button" type="button" class="accent">Reload with current options</button>
+        </section>
+      </aside>
+
+      <main class="panel panel-right">
+        <div class="canvas-wrap">
+          <canvas id="viewer-canvas"></canvas>
+          <div class="overlay top-right" id="scene-meta">No scene loaded</div>
+          <div class="overlay bottom-left">
+            <strong>Tip:</strong> Left drag orbit, right drag pan, wheel zoom.
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <script type="module" src="./app.js"></script>
+  </body>
+</html>

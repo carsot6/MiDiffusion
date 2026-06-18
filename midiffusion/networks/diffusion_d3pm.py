@@ -213,7 +213,10 @@ class MaskAndReplaceDiffusion(BaseDiffusion):
         out = denoise_out.permute((0, 2, 1))     # (B, N, C-1) -> (B, C-1, N)
         B, _, N = out.shape
 
-        log_pred = F.log_softmax(out.double(), dim=1).float()
+        if out.device.type == "mps":
+            log_pred = F.log_softmax(out, dim=1)
+        else:
+            log_pred = F.log_softmax(out.double(), dim=1).float()
         log_pred = torch.clamp(log_pred, LOG_ZERO, 0)
         log_zero_vector = torch.full((B, 1, N), LOG_ZERO).type_as(log_pred)
         return torch.cat((log_pred, log_zero_vector), dim=1)

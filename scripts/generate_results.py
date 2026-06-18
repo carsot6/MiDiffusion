@@ -94,6 +94,8 @@ def main(argv):
 
     if args.gpu < torch.cuda.device_count():
         device = torch.device("cuda:{}".format(args.gpu))
+    elif torch.backends.mps.is_available():
+        device = torch.device("mps")
     else:
         device = torch.device("cpu")
     print("Running code on", device)

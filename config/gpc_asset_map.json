@@ -1,0 +1,264 @@
+{
+  "by_label": {
+    "armchair": {
+      "asset_url": "https://catalog-processed-eu.storage.home-design.ikea.com/2025/12/G-20574144-f3b89eaaf0fb20515ceba51117f7961382edb9e4-simple+draco.glb",
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    "bookshelf": {
+      "asset_url": "https://catalog-processed-eu.storage.home-design.ikea.com/2024/08/G-79407054-18170e56be6dc22e3047942330bb2cd403922f78-simple+draco.glb",
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    "cabinet": {
+      "asset_url": "https://catalog-processed-eu.storage.home-design.ikea.com/2026/01/G-29562491-6900087cb1179874b9da7a980dc146884d9e9c4d-simple.glb",
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    "chest_of_drawers": {
+      "asset_url": "https://catalog-processed-eu.storage.home-design.ikea.com/2024/02/G-80344923-7ea68c7d90906b4bcfb510fa9a37cb4a5f3c4d15-simple+draco.glb",
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    "coffee_table": {
+      "asset_url": "https://catalog-processed-eu.storage.home-design.ikea.com/2025/05/G-40534152-a2ab2be24c18ce109499af4ff75e663aad339970-simple+draco.glb",
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    "desk": {
+      "asset_url": "https://catalog-processed-eu.storage.home-design.ikea.com/2026/03/G-39627977-31113678457a3252c135cf97dc9bde8a96c36e26-simple+draco.glb",
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    "dining_chair": {
+      "asset_url": "https://catalog-processed-eu.storage.home-design.ikea.com/2024/05/G-30576717-f0ffd0b7a8d9588931d6735840a3492a6483eee5-simple+draco.glb",
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    "dining_table": {
+      "asset_url": "https://catalog-processed-eu.storage.home-design.ikea.com/2024/04/G-40568726-46ab9a72682dcc597066a0479da3cf33e3e092c7-simple+draco.glb",
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    "floor_lamp": {
+      "asset_url": "https://catalog-processed-eu.storage.home-design.ikea.com/2026/05/G-70619183-11b9c10f44567bed61cf0d46bca9ff9aadefeccb-simple.glb",
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    "nightstand": {
+      "asset_url": "https://catalog-processed-eu.storage.home-design.ikea.com/2024/08/G-80510007-4a1976a01d40ca56160f0c8a44338a1e2d84fd65-simple+draco.glb",
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    "side_table": {
+      "asset_url": "https://catalog-processed-eu.storage.home-design.ikea.com/2024/07/G-30444468-33e62f64015f92c39472c11a376fa6363d769b20-simple+draco.glb",
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    "sofa_2_seat": {
+      "asset_url": "https://catalog-processed-eu.storage.home-design.ikea.com/2026/05/G-99591065-266635ee5ebf325a694ec43eea6958b4edfad727-simple+draco.glb",
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    "sofa_3_seat": {
+      "asset_url": "https://catalog-processed-eu.storage.home-design.ikea.com/2026/05/G-39591148-38f450a648aba7d27eaac97779116474402bf202-simple+draco.glb",
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    "tv_unit": {
+      "asset_url": "https://catalog-processed-eu.storage.home-design.ikea.com/2024/06/G-49061228-04ab1190dfc063dd37cf526543e1bec9b3584ae5-simple+draco.glb",
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    "wardrobe": {
+      "asset_url": "https://catalog-processed-eu.storage.home-design.ikea.com/2026/02/G-79494819-3fc32942a0befc33078af35213b7d0794ca80b3c-simple.glb",
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    "bed_double": {
+      "asset_url": "https://catalog-processed-eu.storage.home-design.ikea.com/2024/12/G-09241420-89a075d832ffd5c180bc4e1c538b012956e8f7e7-simple.glb",
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    "bed_single": {
+      "asset_url": "https://catalog-processed-eu.storage.home-design.ikea.com/2026/05/G-89227731-57bc9f7d98bc777c8c2acc1cd233e249ef984590-simple+draco.glb",
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    "office_chair": {
+      "asset_url": "https://catalog-processed-eu.storage.home-design.ikea.com/2025/06/G-50556431-e86b545ef97c8265e4b069d313f54f231314119f-simple.glb",
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    "sofa_bed": {
+      "asset_url": "https://catalog-processed-eu.storage.home-design.ikea.com/2026/03/G-69616128-e351bfd33749fd0925ba61f30e2d082cd2636180-simple+draco.glb",
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    "sofa_l_shaped": {
+      "asset_url": "https://catalog-processed-eu.storage.home-design.ikea.com/2026/05/G-39591252-964767e32afa943132edd60a9d09f45468d435d3-simple+draco.glb",
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "offset": [
+        0.0,
+        0.0,
+        0.0
+      ]
+    }
+  }
+}

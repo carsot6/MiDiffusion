@@ -154,9 +154,20 @@ def create_app(max_upload_mb):
 
     @app.route("/api/proxy_asset")
     def proxy_asset():
-        raw_url = request.args.get("url", "").strip()
+        # Flask's request.args treats + as space (form-urlencoded behavior)
+        # Use request.query_string to get raw query and parse manually preserving +
+        query_string = request.query_string.decode("utf-8")
+        # Parse manually: find url= parameter
+        raw_url = ""
+        for part in query_string.split("&"):
+            if part.startswith("url="):
+                raw_url = urllib.parse.unquote(part[4:])  # Remove "url=" and unquote
+                break
+        
         if not raw_url:
             return jsonify({"error": "url query parameter is required"}), 400
+
+        print(f"[PROXY] Received URL: {raw_url}")
 
         try:
             parsed = urllib.parse.urlparse(raw_url)
@@ -166,9 +177,18 @@ def create_app(max_upload_mb):
         if parsed.scheme not in ("http", "https"):
             return jsonify({"error": "only http/https urls are supported"}), 400
 
+        # Reconstruct URL keeping + as-is in path (IKEA needs literal +)
+        safe_path = urllib.parse.quote(parsed.path, safe="/:@!$&'()*+,;=+")
+        safe_query = urllib.parse.quote(parsed.query, safe="/:@!$&'()*+,;=+") if parsed.query else ""
+        safe_url = urllib.parse.urlunparse((
+            parsed.scheme, parsed.netloc, safe_path, parsed.params, safe_query, parsed.fragment
+        ))
+        
+        print(f"[PROXY] Reconstructed URL: {safe_url}")
+
         try:
             req = urllib.request.Request(
-                raw_url,
+                safe_url,
                 headers={
                     "User-Agent": "MiDiffusionLocalViewer/1.0",
                     "Accept": "*/*",
@@ -178,6 +198,8 @@ def create_app(max_upload_mb):
                 body = upstream.read()
                 content_type = upstream.headers.get("Content-Type", "application/octet-stream")
 
+            print(f"[PROXY] Success: {len(body)} bytes, type: {content_type}")
+
             return Response(
                 body,
                 status=200,
@@ -185,6 +207,7 @@ def create_app(max_upload_mb):
                 headers={"Cache-Control": "public, max-age=3600"},
             )
         except Exception as exc:
+            print(f"[PROXY] Error: {exc}")
             return jsonify({"error": f"asset fetch failed: {exc}"}), 502
 
     @app.route("/<path:path>")

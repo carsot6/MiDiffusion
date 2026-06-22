@@ -214,8 +214,19 @@ def main(argv):
 
     # Do the training
     max_grad_norm = config["training"].get("max_grad_norm", None)
+    grad_accum_steps = int(config["training"].get("grad_accum_steps", 1))
+    if grad_accum_steps < 1:
+        raise ValueError("training.grad_accum_steps must be >= 1")
     save_every = config["training"].get("save_frequency", 10)
     val_every = config["validation"].get("frequency", 100)
+
+    batch_size = int(config["training"].get("batch_size", 128))
+    effective_batch_size = batch_size * grad_accum_steps
+    print(
+        "Training with batch_size={} x grad_accum_steps={} => effective_batch_size={}".format(
+            batch_size, grad_accum_steps, effective_batch_size
+        )
+    )
 
     min_val_loss = float("inf")
     min_val_loss_epoch = 0
@@ -231,7 +242,19 @@ def main(argv):
             for k, v in sample.items():
                 if not isinstance(v, list):
                     sample[k] = v.to(device)
-            batch_loss = train_on_batch(network, optimizer, sample, max_grad_norm)
+
+            do_zero_grad = (b % grad_accum_steps) == 0
+            do_step = ((b + 1) % grad_accum_steps) == 0 or ((b + 1) == len(train_loader))
+
+            batch_loss = train_on_batch(
+                network,
+                optimizer,
+                sample,
+                max_grad_norm=max_grad_norm,
+                do_zero_grad=do_zero_grad,
+                do_step=do_step,
+                grad_accum_steps=grad_accum_steps,
+            )
             StatsLogger.instance().print_progress(i, b+1, batch_loss)
 
         if (i % save_every) == 0:

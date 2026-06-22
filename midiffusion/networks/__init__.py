@@ -36,23 +36,37 @@ def optimizer_factory(config, parameters):
         raise NotImplementedError()
 
 
-def train_on_batch(model, optimizer, sample_params, max_grad_norm=None):
-    # Make sure that everything has the correct size
-    optimizer.zero_grad()
+def train_on_batch(
+    model,
+    optimizer,
+    sample_params,
+    max_grad_norm=None,
+    do_zero_grad=True,
+    do_step=True,
+    grad_accum_steps=1,
+):
+    if do_zero_grad:
+        optimizer.zero_grad()
     # Compute the loss
     loss, loss_dict = model.get_loss(sample_params)
     for k, v in loss_dict.items():
         StatsLogger.instance()[k].value = v.item()
-    # Do the backpropagation
-    loss.backward()
-    # Compute model norm
-    if max_grad_norm is not None:
-        grad_norm = clip_grad_norm_(model.parameters(), max_norm=max_grad_norm)
-    StatsLogger.instance()["gradnorm"].value = grad_norm.item()
+    loss_scale = float(max(1, int(grad_accum_steps)))
+    (loss / loss_scale).backward()
+    grad_norm = None
     # log learning rate
     StatsLogger.instance()["lr"].value = optimizer.param_groups[0]['lr']
-    # Do the update
-    optimizer.step()
+    if do_step:
+        if max_grad_norm is not None:
+            grad_norm = clip_grad_norm_(model.parameters(), max_norm=max_grad_norm)
+        else:
+            grads = [p.grad.detach().norm(2) for p in model.parameters() if p.grad is not None]
+            if grads:
+                grad_norm = torch.norm(torch.stack(grads), 2)
+            else:
+                grad_norm = torch.tensor(0.0, device=loss.device)
+        StatsLogger.instance()["gradnorm"].value = grad_norm.item()
+        optimizer.step()
 
     return loss.item()
 

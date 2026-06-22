@@ -1,8 +1,8 @@
 data:
     dataset_type: "cached_threedfront"
     encoding_type: "cached_diffusion_cosin_angle_wocm"
-    dataset_directory: "gpc_real"
-    annotation_file: "gpc_real_splits.csv"
+    dataset_directory: "gpc_all"
+    annotation_file: "gpc_all_splits.csv"
     augmentations: ["fixed_rotations"]
     train_stats: "dataset_stats.txt"
     room_layout_size: "64,64"
@@ -50,21 +50,22 @@ feature_extractor:
 
 training:
     splits: ["train", "val"]
-    epochs: 1000
-    batch_size: 2
-    save_frequency: 100
+    epochs: 50000
+    batch_size: 32
+    grad_accum_steps: 16
+    save_frequency: 500
     max_grad_norm: 10
     optimizer: Adam
     weight_decay: 0.0
     schedule: 'step'
-    lr: 0.00005
+    lr: 0.0002
     lr_step: 10000
     lr_decay: 0.5
 
 validation:
     splits: ["test"]
-    frequency: 1
-    batch_size: 2
+    frequency: 100
+    batch_size: 32
 
 logger:
     type: "wandb"

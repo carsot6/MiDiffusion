@@ -44,20 +44,27 @@ def train_on_batch(
     do_zero_grad=True,
     do_step=True,
     grad_accum_steps=1,
+    scaler=None,
 ):
     if do_zero_grad:
         optimizer.zero_grad()
     # Compute the loss
-    loss, loss_dict = model.get_loss(sample_params)
+    with torch.cuda.amp.autocast(enabled=scaler is not None):
+        loss, loss_dict = model.get_loss(sample_params)
     for k, v in loss_dict.items():
         StatsLogger.instance()[k].value = v.item()
     loss_scale = float(max(1, int(grad_accum_steps)))
-    (loss / loss_scale).backward()
+    if scaler is not None:
+        scaler.scale(loss / loss_scale).backward()
+    else:
+        (loss / loss_scale).backward()
     grad_norm = None
     # log learning rate
     StatsLogger.instance()["lr"].value = optimizer.param_groups[0]['lr']
     if do_step:
         if max_grad_norm is not None:
+            if scaler is not None:
+                scaler.unscale_(optimizer)
             grad_norm = clip_grad_norm_(model.parameters(), max_norm=max_grad_norm)
         else:
             grads = [p.grad.detach().norm(2) for p in model.parameters() if p.grad is not None]
@@ -66,15 +73,20 @@ def train_on_batch(
             else:
                 grad_norm = torch.tensor(0.0, device=loss.device)
         StatsLogger.instance()["gradnorm"].value = grad_norm.item()
-        optimizer.step()
+        if scaler is not None:
+            scaler.step(optimizer)
+            scaler.update()
+        else:
+            optimizer.step()
 
     return loss.item()
 
 
 @torch.no_grad()
-def validate_on_batch(model, sample_params):
+def validate_on_batch(model, sample_params, use_amp=False):
     # Compute the loss
-    loss, loss_dict = model.get_loss(sample_params)
+    with torch.cuda.amp.autocast(enabled=use_amp):
+        loss, loss_dict = model.get_loss(sample_params)
     for k, v in loss_dict.items():
         StatsLogger.instance()[k].value = v.item()
     return loss.item()

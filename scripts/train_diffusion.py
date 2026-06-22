@@ -75,6 +75,11 @@ def main(argv):
         default=0,
         help="GPU ID"
     )
+    parser.add_argument(
+        "--use_amp",
+        action="store_true",
+        help="Use automatic mixed precision (FP16) for faster training on CUDA"
+    )
 
     args = parser.parse_args(argv)
 
@@ -177,6 +182,12 @@ def main(argv):
           f"{n_trainable_params} / {n_all_params}")
     config["network"]["n_params"] = n_trainable_params
 
+    # Create scaler for mixed precision training
+    scaler = torch.cuda.amp.GradScaler() \
+        if args.use_amp and device.type == "cuda" else None
+    if scaler is not None:
+        print("Using automatic mixed precision (AMP) training")
+
     # Build an optimizer object to compute the gradients of the parameters
     optimizer = optimizer_factory(config["training"], \
         filter(lambda p: p.requires_grad, network.parameters())) 
@@ -254,6 +265,7 @@ def main(argv):
                 do_zero_grad=do_zero_grad,
                 do_step=do_step,
                 grad_accum_steps=grad_accum_steps,
+                scaler=scaler,
             )
             StatsLogger.instance().print_progress(i, b+1, batch_loss)
 
@@ -270,7 +282,7 @@ def main(argv):
                 for k, v in sample.items():
                     if not isinstance(v, list):
                         sample[k] = v.to(device)
-                batch_loss = validate_on_batch(network, sample)
+                batch_loss = validate_on_batch(network, sample, use_amp=scaler is not None)
                 StatsLogger.instance().print_progress(-1, b+1, batch_loss)
                 val_loss_total += batch_loss
             StatsLogger.instance().clear()

@@ -1,32 +1,27 @@
-# virtual env
-venv*/
 
 # IDE
-.vscode/
-.idea/
-
 # build files
-build/
-*.egg-info
+# deprecated code
+# eval scripts symbolically linked from ThreedFront
+# log files
+# output dir
+# virtual env
 *.egg
+*.egg-info
+*.log-*
 *.o
+*.pngpretrained_local/
 *.so
 *__pycache__*
-
-# output dir
-output/
-scripts/wandb/
-wandb/
-
-# deprecated code
+.idea/
+.vscode/
 _*/
-
-# eval scripts symbolically linked from ThreedFront
+build/
+output/
+scripts/compute_fid_scores.py
 scripts/evaluate_kl_divergence_object_category.py
 scripts/render_results.py
-scripts/compute_fid_scores.py
 scripts/synthetic_vs_real_classifier.py
-
-# log files
-*.log-*
-*.png
+scripts/wandb/
+venv*/
+wandb/
